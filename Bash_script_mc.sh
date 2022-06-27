@@ -37,7 +37,7 @@ echo "=============================================================="
 echo "Contrôle qualité - échantillon ${sample}"
 echo "=============================================================="
 mkdir -p reads_qc
-srun fastqc "${fastq_dir}/${sample}.fastq" --outdir reads_qc
+#srun fastqc "${fastq_dir}/${sample}.fastq" --outdir reads_qc
 
 echo "=============================================================="
 echo "Alignement des reads sur le génome de référence - échantillon ${sample}"
