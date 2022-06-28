@@ -1,0 +1,46 @@
+---
+title: "DU_Poster"
+author: "Mathieu Chicard"
+date: "28/06/2022"
+output:  
+  html_document:
+    toc: yes
+    toc_float: yes
+    keep_md: yes
+    fig_caption: yes
+  pdf_document:
+    toc: yes
+editor_options:
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Ce script nécessite l'installion des packages suivants: 
+<ul>
+<li>circlize</li>
+</ul>
+
+## Importation des données
+
+Dans un premier temps les données de WGS et Target provenant de séquençage Nanopore vont être importés. Un fichier d'annotation des séquences est également importés
+
+```{r Importation des données, echo=TRUE}
+#choix du bon répertoire d'analyse
+setwd("C:/Users/omics/Desktop/DU/DU_Poster/DU_Poster")
+#lecture du fichier de couverture pour le séquençage Target
+coverage_target <- read.table("coverage-barcode01.bedgraph", sep = "\t")
+#ajout de nom de colonnes
+colnames(coverage_target)<-c("vector","start","end","cov")
+#même commande pour le fichier de couverture WGS
+coverage_WGS <- read.table("coverage-R-19-153-5.bedgraph", sep = "\t")
+colnames(coverage_WGS)<-c("vector","start","end","cov")
+#Importation des annotations qui sont dans un fichier csv
+annot<-read.csv("CD4_annot.csv", sep=";",header=TRUE)
+#Controle de la couverture avec un graphique simple
+plot(coverage_WGS$start,coverage_WGS$cov)
+plot(coverage_target$start,coverage_target$cov)
+```
+
