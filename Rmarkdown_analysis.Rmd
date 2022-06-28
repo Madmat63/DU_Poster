@@ -27,7 +27,7 @@ Ce script nécessite l'installion des packages suivants:
 
 Dans un premier temps les données de WGS et Target provenant de séquençage Nanopore vont être importés. Un fichier d'annotation des séquences est également importés
 
-```{r Importation des données, echo=TRUE}
+```{r Importation des données, echo=TRUE, message=FALSE, warning=FALSE}
 #choix du bon répertoire d'analyse
 setwd("C:/Users/omics/Desktop/DU/DU_Poster/DU_Poster")
 #lecture du fichier de couverture pour le séquençage Target
@@ -44,3 +44,63 @@ plot(coverage_WGS$start,coverage_WGS$cov)
 plot(coverage_target$start,coverage_target$cov)
 ```
 
+```{r Création d'un circos, echo=TRUE, message=FALSE, warning=FALSE}
+#appel de la librairie
+library(circlize)
+#Nettoyage de la zone graphique
+circos.clear()
+#Initialization du circos avec les annotations
+circos.initialize(factors=annot$gene,xlim=matrix(c(rep(0, 10), annot$end), ncol=2))
+#Affichage de la construction
+circos.track(ylim = c(0, 1),panel.fun = function(x, y) {
+chr=CELL_META$sector.index
+xlim=CELL_META$xlim
+ylim=CELL_META$ylim
+circos.text(mean(xlim), mean(ylim), chr,cex=0.5)
+})
+
+```
+```{r Customisation du circos, echo=TRUE, message=FALSE, warning=FALSE}
+#Création à nouveau du circos
+library(circlize)
+circos.clear()
+circos.initialize(factors=annot$gene,xlim=matrix(c(rep(0, 10), annot$end), ncol=2))
+circos.track(ylim = c(0, 1),panel.fun = function(x, y) {
+chr=CELL_META$sector.index
+xlim=CELL_META$xlim
+ylim=CELL_META$ylim
+circos.text(mean(xlim), mean(ylim), chr,cex=0.5)
+})
+
+#Ajout de coordonnées
+circos.track(track.index = get.current.track.index(), panel.fun = function(x, y) {
+circos.axis(h="top",labels.cex=0.4)
+})
+
+```
+
+```{r Ajout de la couverture, echo=TRUE, message=FALSE, warning=FALSE}
+#Création à nouveau du circos
+library(circlize)
+circos.clear()
+circos.initialize(factors=annot$gene,xlim=matrix(c(rep(0, 10), annot$end), ncol=2))
+circos.track(ylim = c(0, 1),panel.fun = function(x, y) {
+chr=CELL_META$sector.index
+xlim=CELL_META$xlim
+ylim=CELL_META$ylim
+circos.text(mean(xlim), mean(ylim), chr,cex=0.5)
+})
+
+#Ajout de coordonnées
+circos.track(track.index = get.current.track.index(), panel.fun = function(x, y) {
+circos.axis(h="top",labels.cex=0.4)
+})
+
+circos.genomicTrack(data=coverage_WGS)panel.fun=function(region, value, ...) {
+circos.genomicLines(region, value)
+})
+# coverage y axis
+circos.yaxis()
+
+
+```
